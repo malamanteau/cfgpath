@@ -51,6 +51,11 @@
 /* MAX_PATH is defined by the Windows API */
 #define PATH_SEPARATOR_CHAR '\\'
 #define PATH_SEPARATOR_STRING "\\"
+#if defined UNICODE
+	#define CFG_STR_PTR_TYPE LPWSTR
+#else
+	#define CFG_STR_PTR_TYPE LPSTR
+#endif
 #elif defined(__APPLE__)
 #include <CoreServices/CoreServices.h>
 #include <sys/stat.h>
@@ -132,7 +137,7 @@ static inline void get_user_config_file(char *out, unsigned int maxlen, const ch
 		out[0] = 0;
 		return;
 	}
-	if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, out))) {
+	if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, (CFG_STR_PTR_TYPE)(void *)out))) {
 		out[0] = 0;
 		return;
 	}
@@ -241,7 +246,7 @@ static inline void get_user_config_folder(char *out, unsigned int maxlen, const 
 		out[0] = 0;
 		return;
 	}
-	if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, out))) {
+	if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, 0, (CFG_STR_PTR_TYPE)(void *)out))) {
 		out[0] = 0;
 		return;
 	}
@@ -443,7 +448,7 @@ static inline void get_user_cache_folder(char *out, unsigned int maxlen, const c
 		out[0] = 0;
 		return;
 	}
-	if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, out))) {
+	if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, (CFG_STR_PTR_TYPE)(void *)out))) {
 		out[0] = 0;
 		return;
 	}
